@@ -1,0 +1,16 @@
+<div class="row">
+  <div *ngFor="let day of days" class="column col-sm-4 p-3">
+    <div class="card">
+      <div class="card-header">
+        {{day}}
+      </div>
+      <div *ngFor="let exercise of categorizedExercises; index as i">
+        <div *ngIf="categorizedExercises![i].dayName === day && categorizedExercises![i].fitnessGoalName === fitnessGoal && categorizedExercises![i].fitnessLevelName === fitnessLevel">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{categorizedExercises![i].exerciseName}}: sets-{{categorizedExercises![i].sets}}, reps-{{categorizedExercises![i].reps}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

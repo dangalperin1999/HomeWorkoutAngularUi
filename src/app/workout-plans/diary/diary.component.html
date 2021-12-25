@@ -1,0 +1,48 @@
+<div class="row card-center">
+  <div class="column col-sm-4 p-3">
+    <div class="card">
+      <div class="card-header" *ngIf="isDiaryFormVisible">
+        Add exercise to keep track of
+      </div>
+      <div class="card-header" *ngIf="!isDiaryFormVisible">
+        Tracked exercises
+      </div>
+      <form (ngSubmit)='onSubmit()' [formGroup]="diaryForm" *ngIf="isDiaryFormVisible">
+        <div class="form-group col-12">
+          <select class="form-select" formControlName="exercises">
+            <option [ngValue]="null" disabled>Choose your exercise</option>
+            <option *ngFor="let exercise of exercisesArray; index as i" class="column col-sm-4 p-3" value={{exercisesArray![i].name}} selected>{{exercisesArray![i].name}}</option>
+          </select>
+          <input type="number" class="form-control" placeholder="Sets" formControlName="sets">
+          <input type="number" class="form-control" placeholder="Reps" formControlName="reps">
+          <div class="form-group col-12">
+            <button type="submit" class="btn btn-primary" (click)="addExerciseToArray()">Save</button>
+            <button type="button" class="btn btn-secondary m-2" (click)="isDiaryFormVisible = false">Show</button>
+          </div>
+        </div>
+      </form>
+      <div class="form-group col-12" *ngIf="!isDiaryFormVisible">
+        <div *ngFor="let exercise of userWorkoutPlansArray; index as i">
+          <div *ngIf="!userWorkoutPlansArray![i].dayName && userWorkoutPlansArray![i].usersId === userId && userWorkoutPlansArray">
+            <ul class="list-group list-group-flush">
+              <li id="{{i}}" class="list-group-item">
+                {{userWorkoutPlansArray![i].exerciseName}}: sets-{{userWorkoutPlansArray![i].sets}} , reps-{{userWorkoutPlansArray![i].reps}}
+                <button type="button" class="fas fa-pen-square" (click)="toggleDietAndFormVisibility('exercise' + i, i)"></button>
+                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userWorkoutPlansArray![i], i)"></button>
+              </li>
+              <li id="{{'exercise' + i}}" class="list-group-item" [hidden]="true">
+                {{userWorkoutPlansArray![i].exerciseName}}:
+                sets- <input class="input" type="number" placeholder="{{userWorkoutPlansArray![i].sets}}" #setsVar>
+                reps-<input class="input m-2" type="number" placeholder="{{userWorkoutPlansArray![i].reps}}" #repsVar>
+                <button type="button" class="fas fa-pen-square" (click)="toggleDietAndFormVisibility('exercise' + i, i)"></button>
+                <button type="button" class="fas fa-save" (click)="updateUserWorkoutPlan(exercise.id!, exercise.exerciseName, setsVar.value, repsVar.value)"></button>
+                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userWorkoutPlansArray![i], i)"></button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="isDiaryFormVisible = true">Add</button>
+      </div>
+    </div>
+  </div>
+</div>

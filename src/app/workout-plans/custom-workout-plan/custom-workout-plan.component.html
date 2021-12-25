@@ -1,0 +1,34 @@
+<div class="row">
+  <div *ngFor="let day of days; index as j" class="column col-sm-4 p-3">
+    <div class="card">
+      <div class="card-header">
+        {{day}}
+      </div>
+      <form [formGroup]="workoutPlanForm" (ngSubmit)="onSubmit()" [hidden]="true" id="{{j}}">
+        <select class="form-select" formControlName="exercises">
+          <option [ngValue]="null" disabled>Choose your exercise</option>
+          <option *ngFor="let exercise of exercisesArray; index as i" class="column col-sm-4 p-3" value={{exercisesArray![i].name}} selected>{{exercisesArray![i].name}}</option>
+        </select>
+        <input type="number" class="form-control" placeholder="Sets" formControlName="sets">
+        <input type="number" class="form-control" placeholder="Reps" formControlName="reps">
+        <div class="form-group col-12">
+          <button type="submit" class="btn btn-primary" (click)="addExerciseToArray(j)">Save</button>
+          <button type="button" class="btn btn-secondary m-2" (click)="toggleWorkoutPlanAndFormVisibility(j, day)">Show</button>
+        </div>
+      </form>
+      <div class="form-group col-12" id="{{day}}">
+        <div *ngFor="let exercise of userWorkoutPlansArray; index as i">
+          <div *ngIf="userWorkoutPlansArray![i].dayName && userWorkoutPlansArray![i].dayName === day && userWorkoutPlansArray![i].usersId === userId && userWorkoutPlansArray">
+            <ul class="list-group list-group-flush">
+              <li id="{{exercise.id}}" class="list-group-item">
+                {{userWorkoutPlansArray![i].exerciseName}}: sets-{{userWorkoutPlansArray![i].sets}} , reps-{{userWorkoutPlansArray![i].reps}}
+                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userWorkoutPlansArray![i], i)"></button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="toggleWorkoutPlanAndFormVisibility(j, day)">Add</button>
+      </div>
+    </div>
+  </div>
+</div>

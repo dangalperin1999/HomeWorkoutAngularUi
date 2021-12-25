@@ -1,0 +1,49 @@
+<div class="row">
+  <div *ngFor="let day of days; index as j" class="column col-sm-4 p-3">
+    <div class="card">
+      <div class="card-header">
+        {{day}}
+      </div>
+      <form [formGroup]="userDietForm" (ngSubmit)="onSubmit()" [hidden]="true" id="{{j}}">
+        <select class="form-select" formControlName="foodType">
+          <option [ngValue]="null" disabled>Choose your food type</option>
+          <option value="Protein">Protein</option>
+          <option value="Carbohydrate">Carbohydrate</option>
+          <option value="Fat">Fat</option>
+        </select>
+        <select class="form-select" formControlName="foodName">
+          <option [ngValue]="null" disabled>Choose your food</option>
+          <ng-container class="column col-sm-4 p-3" *ngFor="let food of foodArray; index as i;">
+            <option *ngIf="foodArray![i].foodTypeName === foodType.value" value={{foodArray![i].name}} selected>{{foodArray![i].name}}</option>
+          </ng-container>
+        </select>
+        <input type="number" class="form-control" placeholder="Grams" formControlName="grams">
+        <div *ngFor="let food of foodArray">
+          <div *ngIf="food.name === foodName.value && setCalories(food.calories, grams.value)">Calories: {{calories}}</div>
+        </div>
+        <div class="form-group col-12">
+          <button type="submit" class="btn btn-primary" (click)="addDietToArray(j)">Save</button>
+          <button type="button" class="btn btn-secondary m-2" (click)="toggleDietAndFormVisibility(j, day)">Show</button>
+        </div>
+      </form>
+      <div class="col-12" id="{{day}}">
+        <div *ngFor="let diet of userDietsArray; index as i">
+          <div *ngIf="userDietsArray![i].dayName && userDietsArray![i].dayName === day && userDietsArray![i].userId === userId">
+            <ul class="list-group list-group-flush">
+              <li id="{{diet.id}}" class="list-group-item">
+                {{userDietsArray![i].foodName}}: food type-{{userDietsArray![i].foodTypeName}} , grams-{{userDietsArray![i].grams}} , calories-{{userDietsArray![i].calories}}
+                <button type="button" class="fa fa-close" (click)="deleteDietFromArrayAndDb(userDietsArray![i], i)"></button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="list-group list-group-flush" *ngIf="setCaloriesForEachDay()">
+          <div *ngIf="dailyCalories[j].caloriesSum" class="list-group-item"></div>
+          <div class="list-group-item">Sum of calories: proteins-{{dailyCalories[j].proteinsCalories}} , carbohydrates-{{dailyCalories[j].carbsCalories}} , fats-{{dailyCalories[j].fatsCalories}} , calories-{{dailyCalories[j].caloriesSum}}</div>
+          <div class="list-group-item">Required calories: proteins-{{requiredCalories.proteinsCalories}} , carbohydrates-{{requiredCalories.carbsCalories}} , fats-{{requiredCalories.fatsCalories}} , calories-{{requiredCalories.caloriesSum}}</div>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="toggleDietAndFormVisibility(j, day)">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
