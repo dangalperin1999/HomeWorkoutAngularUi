@@ -31,8 +31,4 @@ postUserWorkoutPlan(userWorkoutPlan: IUserWorkoutPlan){
 deleteUserWorkoutPlan(userWorkoutPlan: IUserWorkoutPlan){
   return this.http.delete("https://localhost:44386/api/UserWorkoutPlans/" + userWorkoutPlan.id);
 }
-
-updateUserWorkoutPlan(id: number, userWorkoutPlan: IUserWorkoutPlan){
-  return this.http.put("https://localhost:44386/api/UserWorkoutPlans/" + id, userWorkoutPlan);
-}
 }

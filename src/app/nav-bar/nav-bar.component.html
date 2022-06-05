@@ -18,22 +18,15 @@
         <li class="nav-item" >
           <a class="nav-link" [routerLinkActiveOptions]="{exact:true}" routerLinkActive="active" routerLink="/diary">Diary</a>
         </li>
+        <li class="nav-item" >
+          <a class="nav-link" [routerLinkActiveOptions]="{exact:true}" routerLinkActive="active" routerLink="/user/profile">My Profile</a>
+        </li>
+        <li class="nav-item" >
+          <button class="nav-link logout" (click)='onLogout()'>Logout</button>
+        </li>
       </ul>
       <div>
-        <ul class="nav navbar-nav">
-          <div *ngIf="loggedin()" class="dropdown" dropdown>
-            <a href="#" class="dropdown-toggle text-light m-3" dropdownToggle (click)="false">
-              Welcome {{loggedinUser}}
-            </a>
 
-            <div class="dropdown-menu" *dropdownMenu>
-              <button href="#" class="dropdown-item" [routerLinkActiveOptions]="{exact:true}" routerLinkActive="active" routerLink="/user/profile">
-                <i class="fas fa-user-circle"></i>My Profile</button>
-              <button (click)='onLogout()' class="dropdown-item">
-                <i class="fas fa-sign-out-alt"></i>Logout</button>
-            </div>
-          </div>
-        </ul>
       </div>
     </div>
   </div>

@@ -19,9 +19,7 @@ export class UserLoginComponent implements OnInit {
   onLogin(loginForm: NgForm){
     this.authService.authUser(loginForm.value).subscribe(
       response => {
-        console.log(response);
         const user = Object.values(response);
-        console.log(user);
         localStorage.setItem('id', user[0]);
         localStorage.setItem('userName', user[1]);
         localStorage.setItem('fitnessGoal', user[2]);

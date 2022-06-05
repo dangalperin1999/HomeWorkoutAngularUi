@@ -21,6 +21,9 @@ import { ExercisesService } from './services/exercises.service';
 import { UserWorkoutPlanService } from './services/userWorkoutPlan.service';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
+import { UserDieryService } from './services/userDiery.service';
+import { UserDietService } from './services/userDiet.service';
+import { FoodService } from './services/food.service';
 
 
 const appRoutes: Routes = [
@@ -60,7 +63,10 @@ const appRoutes: Routes = [
     CategorizedExercisesService,
     AlertifyService,
     AuthService,
+    FoodService,
     ExercisesService,
+    UserDietService,
+    UserDieryService,
     UserWorkoutPlanService
   ],
   bootstrap: [AppComponent]

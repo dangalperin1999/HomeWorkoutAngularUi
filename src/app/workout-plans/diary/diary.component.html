@@ -1,13 +1,13 @@
 <div class="row card-center">
   <div class="column col-sm-4 p-3">
     <div class="card">
-      <div class="card-header" *ngIf="isDiaryFormVisible">
+      <div class="card-header" *ngIf="isDieryFormVisible">
         Add exercise to keep track of
       </div>
-      <div class="card-header" *ngIf="!isDiaryFormVisible">
+      <div class="card-header" *ngIf="!isDieryFormVisible">
         Tracked exercises
       </div>
-      <form (ngSubmit)='onSubmit()' [formGroup]="diaryForm" *ngIf="isDiaryFormVisible">
+      <form (ngSubmit)='onSubmit()' [formGroup]="dieryForm" *ngIf="isDieryFormVisible">
         <div class="form-group col-12">
           <select class="form-select" formControlName="exercises">
             <option [ngValue]="null" disabled>Choose your exercise</option>
@@ -17,31 +17,31 @@
           <input type="number" class="form-control" placeholder="Reps" formControlName="reps">
           <div class="form-group col-12">
             <button type="submit" class="btn btn-primary" (click)="addExerciseToArray()">Save</button>
-            <button type="button" class="btn btn-secondary m-2" (click)="isDiaryFormVisible = false">Show</button>
+            <button type="button" class="btn btn-secondary m-2" (click)="isDieryFormVisible = false">Show</button>
           </div>
         </div>
       </form>
-      <div class="form-group col-12" *ngIf="!isDiaryFormVisible">
-        <div *ngFor="let exercise of userWorkoutPlansArray; index as i">
-          <div *ngIf="!userWorkoutPlansArray![i].dayName && userWorkoutPlansArray![i].usersId === userId && userWorkoutPlansArray">
+      <div class="form-group col-12" *ngIf="!isDieryFormVisible">
+        <div *ngFor="let exercise of userDieriesArray; index as i">
+          <div *ngIf="userDieriesArray![i].userId === userId && userDieriesArray">
             <ul class="list-group list-group-flush">
               <li id="{{i}}" class="list-group-item">
-                {{userWorkoutPlansArray![i].exerciseName}}: sets-{{userWorkoutPlansArray![i].sets}} , reps-{{userWorkoutPlansArray![i].reps}}
-                <button type="button" class="fas fa-pen-square" (click)="toggleDietAndFormVisibility('exercise' + i, i)"></button>
-                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userWorkoutPlansArray![i], i)"></button>
+                {{userDieriesArray![i].exerciseName}}: sets-{{userDieriesArray![i].sets}} , reps-{{userDieriesArray![i].reps}}
+                <button type="button" class="fas fa-pen-square" (click)="toggleDieryAndFormVisibility('exercise' + i, i)"></button>
+                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userDieriesArray![i], i)"></button>
               </li>
               <li id="{{'exercise' + i}}" class="list-group-item" [hidden]="true">
-                {{userWorkoutPlansArray![i].exerciseName}}:
-                sets- <input class="input" type="number" placeholder="{{userWorkoutPlansArray![i].sets}}" #setsVar>
-                reps-<input class="input m-2" type="number" placeholder="{{userWorkoutPlansArray![i].reps}}" #repsVar>
-                <button type="button" class="fas fa-pen-square" (click)="toggleDietAndFormVisibility('exercise' + i, i)"></button>
-                <button type="button" class="fas fa-save" (click)="updateUserWorkoutPlan(exercise.id!, exercise.exerciseName, setsVar.value, repsVar.value)"></button>
-                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userWorkoutPlansArray![i], i)"></button>
+                {{userDieriesArray![i].exerciseName}}:
+                sets- <input class="input" type="number" placeholder="{{userDieriesArray![i].sets}}" #setsVar>
+                reps-<input class="input m-2" type="number" placeholder="{{userDieriesArray![i].reps}}" #repsVar>
+                <button type="button" class="fas fa-pen-square" (click)="toggleDieryAndFormVisibility('exercise' + i, i)"></button>
+                <button type="button" class="fas fa-save" (click)="updateUserDiary(exercise.id!, exercise.exerciseName, setsVar.value, repsVar.value)"></button>
+                <button type="button" class="fa fa-close" (click)="deleteExerciseFromArrayAndDb(userDieriesArray![i], i)"></button>
               </li>
             </ul>
           </div>
         </div>
-        <button type="button" class="btn btn-primary" (click)="isDiaryFormVisible = true">Add</button>
+        <button type="button" class="btn btn-primary" (click)="isDieryFormVisible = true">Add</button>
       </div>
     </div>
   </div>

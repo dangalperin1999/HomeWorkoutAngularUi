@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IExercise } from 'src/app/models/IExercise';
-import { IUserWorkoutPlan } from 'src/app/models/IUserWorkoutPlan';
+import { IUserDiery } from 'src/app/models/IUserDiery';
 import { AlertifyService } from 'src/app/services/alertify.service';
 import { ExercisesService } from 'src/app/services/exercises.service';
-import { UserWorkoutPlanService } from 'src/app/services/userWorkoutPlan.service';
+import { UserDieryService } from 'src/app/services/userDiery.service';
 
 @Component({
   selector: 'app-diary',
@@ -13,24 +13,24 @@ import { UserWorkoutPlanService } from 'src/app/services/userWorkoutPlan.service
   styleUrls: ['./diary.component.css']
 })
 export class DiaryComponent implements OnInit {
-  diaryForm!: FormGroup;
+  dieryForm!: FormGroup;
   userSubmitted = false;
   exercisesArray: IExercise[] = [];
-  isDiaryFormVisible = false;
+  isDieryFormVisible = false;
   isExerciseVisible = true;
-  userDiary!: IUserWorkoutPlan;
-  userWorkoutPlansArray: IUserWorkoutPlan[] = [];
+  userDiery!: IUserDiery;
+  userDieriesArray: IUserDiery[] = [];
   userId = Number(localStorage.getItem('id'));
-  constructor(private router:Router, private exercisesService: ExercisesService, private fb: FormBuilder, private alertify: AlertifyService, private userWorkoutPlanService: UserWorkoutPlanService) { }
+  constructor(private router:Router, private exercisesService: ExercisesService, private fb: FormBuilder, private alertify: AlertifyService, private userDieryService: UserDieryService) { }
 
   ngOnInit() {
     this.getAllExercises();
-    this.getUserWorkoutPlans();
+    this.getUserDieries();
     this.createRegisterationForm();
   }
 
   createRegisterationForm(){
-    this.diaryForm = this.fb.group({
+    this.dieryForm = this.fb.group({
       exercises: [null, Validators.required],
       sets: [null, [Validators.required]],
       reps: [null, Validators.required],
@@ -38,44 +38,44 @@ export class DiaryComponent implements OnInit {
   }
 
   get exercises(){
-    return this.diaryForm.get('exercises') as FormControl;
+    return this.dieryForm.get('exercises') as FormControl;
   }
 
   get sets(){
-    return this.diaryForm.get('sets') as FormControl;
+    return this.dieryForm.get('sets') as FormControl;
   }
 
   get reps(){
-    return this.diaryForm.get('reps') as FormControl;
+    return this.dieryForm.get('reps') as FormControl;
   }
   onSubmit(){
     this.userSubmitted = true;
-    if(this.diaryForm.valid){
-      this.userWorkoutPlanService.postUserWorkoutPlan(this.diaryData()).subscribe(() =>
+    if(this.dieryForm.valid){
+      this.userDieryService.postUserDiery(this.dieryData()).subscribe(() =>
       {
         this.userSubmitted = false;
-        this.diaryForm.reset();
+        this.dieryForm.reset();
         this.alertify.success("Exercise submited");
-        this.getUserWorkoutPlans();
+        this.getUserDieries();
       }, error => {
         this.alertify.error('Provide the required fields');
       });
     }
   }
 
-  diaryData(): IUserWorkoutPlan{
-    return this.userDiary = {
-      usersId: this.userId,
+  dieryData(): IUserDiery{
+    return this.userDiery = {
+      userId: this.userId,
       exerciseName: this.exercises.value,
       sets: this.sets.value,
       reps: this.reps.value
     }
   }
 
-  getUserWorkoutPlans(){
-    this.userWorkoutPlanService.getUserWorkoutPlans().subscribe(
+  getUserDieries(){
+    this.userDieryService.getUserDieries().subscribe(
       data=>{
-        this.userWorkoutPlansArray=data;
+        this.userDieriesArray=data;
       },error=>{
         console.log(error);
       }
@@ -92,28 +92,28 @@ export class DiaryComponent implements OnInit {
   }
 
   addExerciseToArray(){
-    if(this.diaryForm.valid){
-      this.userWorkoutPlansArray?.push(this.diaryData());
+    if(this.dieryForm.valid){
+      this.userDieriesArray?.push(this.dieryData());
     }
   }
 
-  deleteExerciseFromArrayAndDb(exerciseToDelete: IUserWorkoutPlan, i: number){
-    this.userWorkoutPlanService.deleteUserWorkoutPlan(exerciseToDelete).subscribe();
-    const index = this.userWorkoutPlansArray!.findIndex((item) => item.id === exerciseToDelete.id);
-    this.userWorkoutPlansArray.splice(index, 1);
+  deleteExerciseFromArrayAndDb(exerciseToDelete: IUserDiery, i: number){
+    this.userDieryService.deleteUserDiery(exerciseToDelete).subscribe();
+    const index = this.userDieriesArray!.findIndex((item) => item.id === exerciseToDelete.id);
+    this.userDieriesArray.splice(index, 1);
     var link = document.getElementById(String(i))!;
     link.style.visibility = 'hidden';
   }
 
-  updateUserWorkoutPlan(id: number, exercise: string, sets: string, reps: string){
-    var updatedUserWorkoutPlan: IUserWorkoutPlan = {id: id, usersId: this.userId, exerciseName: exercise, sets: Number(sets), reps: Number(reps)};
-    this.userWorkoutPlanService.updateUserWorkoutPlan(id, updatedUserWorkoutPlan).subscribe();
-    this.getUserWorkoutPlans();
+  updateUserDiary(id: number, exercise: string, sets: string, reps: string){
+    var updatedUserWorkoutPlan: IUserDiery = {id: id, userId: this.userId, exerciseName: exercise, sets: Number(sets), reps: Number(reps)};
+    this.userDieryService.updateUserDiery(id, updatedUserWorkoutPlan).subscribe();
+    this.getUserDieries();
     this.alertify.success("Exercise updated");
     window.location.reload();
   }
 
-  toggleDietAndFormVisibility(editExercise: string, exerciseId: number){
+  toggleDieryAndFormVisibility(editExercise: string, exerciseId: number){
     if(exerciseId === Number(editExercise.slice(8))){
       var form = document.getElementById(String(exerciseId))!;
       form.hidden = !form.hidden;
